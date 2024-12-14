@@ -1,10 +1,19 @@
-<script setup></script>
+<script setup>
+import { useContactStore } from "@/stores/contact";
+
+const contactStore = useContactStore();
+const contacts = contactStore.contacts;
+</script>
 <template>
-  <li class="md:flex items-center justify-between py-4">
+  <li
+    class="md:flex items-center justify-between py-4"
+    v-for="contact in contacts"
+    :key="contact.id"
+  >
     <div class="pb-4 md:pb-0">
-      <h3 class="text-lg font-semibold">John Doe</h3>
-      <p class="text-gray-500">johndoe@example.com</p>
-      <p class="text-gray-500">+123 456 789</p>
+      <h3 class="text-lg font-semibold">{{ contact.name }}</h3>
+      <p class="text-gray-500">{{ contact.email }}</p>
+      <p class="text-gray-500">{{ contact.phone }}</p>
     </div>
     <div class="flex gap-2">
       <button
