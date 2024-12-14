@@ -1,11 +1,10 @@
 <script setup>
 import { useContactStore } from "@/stores/contact";
 import { reactive } from "vue";
-import ContactButtonEdit from "./ContactButtonEdit.vue";
-import ContactButtonSave from "./ContactButtonSave.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const contactStore = useContactStore();
-const contacts = contactStore.contacts;
 
 const newContact = reactive({
   id: "",
@@ -16,17 +15,20 @@ const newContact = reactive({
 
 const add = () => {
   newContact.id = Date.now();
-  contacts.push({ ...newContact });
-  newContact.id = null;
+  contactStore.addOne({ ...newContact }); // Utilisation correcte de addOne
   newContact.name = "";
   newContact.email = "";
   newContact.phone = "";
+
+  // Rediriger après l'ajout du contact
+  router.push("/");
 };
 </script>
+
 <template>
   <section class="w-full lg:w-1/3 bg-white rounded-lg shadow p-6">
     <h2 class="text-xl font-semibold mb-4">Add / Edit Contact</h2>
-    <form id="contact-form" class="space-y-4">
+    <form id="contact-form" class="space-y-4" @submit.prevent="add">
       <div>
         <label for="name" class="block text-sm font-medium">Name</label>
         <input
@@ -57,9 +59,15 @@ const add = () => {
           v-model="newContact.phone"
         />
       </div>
-      <ContactButtonSave />
-      <ContactButtonEdit />
+      <!-- Un seul bouton de soumission -->
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
+      >
+        Save Contact
+      </button>
     </form>
   </section>
 </template>
+
 <style scoped></style>

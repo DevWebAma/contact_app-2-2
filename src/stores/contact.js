@@ -1,13 +1,16 @@
-// import {reactive, computed, watch} from "vue";
 import { defineStore } from "pinia";
 import { reactive, watch } from "vue";
 
 export const useContactStore = defineStore("contact", () => {
   const contacts = reactive(JSON.parse(localStorage.getItem("contacts")) || []);
 
-  watch(contacts, (newValue, oldValue) => {
+  const addOne = (contact) => {
+    contacts.push(contact);
+  };
+
+  watch(contacts, (newValue) => {
     localStorage.setItem("contacts", JSON.stringify(newValue));
   });
 
-  return { contacts };
+  return { contacts, addOne };
 });
