@@ -3,14 +3,11 @@ import "./assets/styles.css";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import App from "./App.vue";
-import { useContactStore } from "./stores/contact";
+import router from "./router";
 
 const app = createApp(App);
 
 app.use(createPinia());
+app.use(router);
 
 app.mount("#app");
-
-app.config.globalProperties.$nextTick(() => {
-  useContactStore().loadContacts();
-});
