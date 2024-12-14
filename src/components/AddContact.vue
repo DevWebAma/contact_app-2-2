@@ -6,6 +6,12 @@ const router = useRouter();
 const contactStore = useContactStore();
 
 const newContact = contactStore.newContact;
+
+const update = () => {
+  contactStore.updateOne({ ...newContact });
+  router.push("/");
+};
+
 const add = () => {
   newContact.id = Date.now();
   contactStore.addOne({ ...newContact }); // Utilisation correcte de addOne
@@ -16,12 +22,30 @@ const add = () => {
   // Rediriger après l'ajout du contact
   router.push("/");
 };
+
+const saveContactOrEdit = () => {
+  if (contactStore.isEditing) {
+    update(); // Si on est en mode édition, appeler update
+  } else {
+    add(); // Sinon, appeler add
+  }
+};
 </script>
 
 <template>
   <section class="w-full lg:w-1/3 bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-semibold mb-4">Add / Edit Contact</h2>
-    <form id="contact-form" class="space-y-4" @submit.prevent="add()">
+    <h2 class="text-xl font-semibold mb-4">
+      {{ contactStore.isEditing ? "Edit Contact" : "Add" }}
+    </h2>
+    <form
+      id="contact-form"
+      class="space-y-4"
+      @submit.prevent="
+        {
+          saveContactOrEdit();
+        }
+      "
+    >
       <div>
         <label for="name" class="block text-sm font-medium">Name</label>
         <input
@@ -63,13 +87,7 @@ const add = () => {
         type="submit"
         class="w-full bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
       >
-        Save Contact
-      </button>
-      <button
-        type="submit"
-        class="w-full bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
-      >
-        Edit Contact
+        {{ contactStore.isEditing ? "Edit Contact" : "Save Contact" }}
       </button>
     </form>
   </section>

@@ -10,7 +10,7 @@ export const useContactStore = defineStore("contact", {
       email: "",
       phone: "",
     },
-    isEditing: "",
+    isEditing: false,
     searchQuery: "",
   }),
   actions: {
@@ -19,8 +19,18 @@ export const useContactStore = defineStore("contact", {
     },
 
     editOne(id) {
-      this.newContact =
-        this.contacts.find((contact) => contact.id === id) || {};
+      this.isEditing = true;
+      this.newContact = {
+        ...this.contacts.find((contact) => contact.id === id),
+      };
+    },
+
+    updateOne(id) {
+      this.contacts.splice(
+        this.contacts.findIndex((contact) => contact.id === id),
+        1,
+        { ...this.newContact }
+      );
     },
 
     deleteOne(id) {
@@ -30,5 +40,4 @@ export const useContactStore = defineStore("contact", {
       );
     },
   },
-  // Utilisation de watch dans un composant pour surveiller les changements de `contacts` et les sauvegarder dans localStorage
 });

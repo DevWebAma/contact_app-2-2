@@ -1,12 +1,22 @@
 <script setup>
 import { useContactStore } from "@/stores/contact";
+
 const contactStore = useContactStore();
 const props = defineProps({
   contact: {
     type: Object,
     required: true,
   },
+  onEdit: {
+    type: Function,
+    required: true,
+  },
 });
+
+const edit = () => {
+  contactStore.editOne(props.contact.id);
+  props.onEdit();
+};
 </script>
 <template>
   <li class="md:flex items-center justify-between py-4">
@@ -18,7 +28,7 @@ const props = defineProps({
     <div class="flex gap-2">
       <button
         class="bg-yellow-400 text-white px-4 py-2 rounded shadow hover:bg-yellow-500"
-        @click.prevent="contactStore.editOne(contact.id)"
+        @click.prevent="edit"
       >
         Edit
       </button>

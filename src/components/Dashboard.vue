@@ -1,8 +1,10 @@
 <script setup>
 import { useContactStore } from "@/stores/contact";
 // import { watch } from "vue";
+import { useRouter } from "vue-router";
 import ContactListHeader from "./ContactListHeader.vue";
 import ContactListItem from "./ContactListItem.vue";
+const router = useRouter();
 
 const contactStore = useContactStore();
 const contacts = contactStore.contacts;
@@ -12,7 +14,9 @@ const props = defineProps({
     Required: true,
   },
 });
-
+const send = () => {
+  router.push("/add-contact");
+};
 // watch(contacts, (newValue) => {
 //   localStorage.setItem("contacts", JSON.stringify(newValue));
 // });
@@ -27,6 +31,7 @@ const props = defineProps({
         v-for="contact in contacts"
         :key="contact.id"
         :contact="contact"
+        :onEdit="send"
       />
     </ul>
   </section>
