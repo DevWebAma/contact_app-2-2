@@ -7,7 +7,6 @@ export const useContactStore = defineStore("contact", () => {
   const addOne = (contact) => {
     contacts.push(contact);
   };
-
   watch(contacts, (newValue) => {
     localStorage.setItem("contacts", JSON.stringify(newValue));
   });
