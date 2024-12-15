@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
 
 export const useContactStore = defineStore("contact", {
   state: () => ({
-    contacts: reactive(JSON.parse(localStorage.getItem("contacts")) || []),
+    contacts: JSON.parse(localStorage.getItem("contacts")) || [],
     newContact: {
       id: null,
       name: "",
@@ -39,5 +38,8 @@ export const useContactStore = defineStore("contact", {
         1
       );
     },
+  },
+  getters: {
+    contactCount: (state) => state.contacts.length,
   },
 });
