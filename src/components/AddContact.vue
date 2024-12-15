@@ -1,35 +1,46 @@
 <script setup>
+import { reactive, watch } from "vue";
 import { useContactStore } from "@/stores/contact";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const contactStore = useContactStore();
 
-const newContact = contactStore.newContact;
+const newContactLocal = reactive({ ...contactStore.newContact });
 
 const update = () => {
-  contactStore.updateOne({ ...newContact });
+  contactStore.updateOne({ ...newContactLocal });
+  contactStore.resetNewContact();
   router.push("/");
 };
 
 const add = () => {
-  newContact.id = Date.now();
-  contactStore.addOne({ ...newContact }); // Utilisation correcte de addOne
-  newContact.name = "";
-  newContact.email = "";
-  newContact.phone = "";
+  newContactLocal.id = Date.now();
+  contactStore.addOne({ ...newContactLocal });
+  contactStore.resetNewContact();
+  newContactLocal.name = "";
+  newContactLocal.email = "";
+  newContactLocal.phone = "";
 
   // Rediriger après l'ajout du contact
   router.push("/");
 };
 
-const saveContactOrEdit = () => {
+const saveContactOrEdit = (id) => {
   if (contactStore.isEditing) {
-    update(); // Si on est en mode édition, appeler update
+    update();
   } else {
-    add(); // Sinon, appeler add
+    add();
   }
 };
+
+watch(
+  () => contactStore.newContact,
+  (newValue) => {
+    Object.assign(newContactLocal, newValue);
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -55,7 +66,7 @@ const saveContactOrEdit = () => {
           autocomplete="name"
           placeholder="John Doe"
           class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          v-model="newContact.name"
+          v-model="newContactLocal.name"
         />
       </div>
       <div>
@@ -67,7 +78,7 @@ const saveContactOrEdit = () => {
           autocomplete="email"
           placeholder="johndoe@example.com"
           class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          v-model="newContact.email"
+          v-model="newContactLocal.email"
         />
       </div>
       <div>
@@ -79,7 +90,7 @@ const saveContactOrEdit = () => {
           autocomplete="tel"
           placeholder="+123 456 789"
           class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          v-model="newContact.phone"
+          v-model="newContactLocal.phone"
         />
       </div>
       <!-- Un seul bouton de soumission -->

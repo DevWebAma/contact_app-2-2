@@ -1,36 +1,48 @@
 <script setup>
 import { useContactStore } from "@/stores/contact";
-import { computed } from "vue";
-// import { watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import ContactListHeader from "./ContactListHeader.vue";
 import ContactListItem from "./ContactListItem.vue";
-const router = useRouter();
 
+const router = useRouter();
 const contactStore = useContactStore();
-const contacts = computed(() => contactStore.contacts);
+const contacts = contactStore.contacts;
 const contactCount = computed(() => contactStore.contactCount);
-const props = defineProps({
-  contacts: {
-    type: Array,
-    Required: true,
-  },
-});
+const filterContacts = computed(() => contactStore.filterContacts);
+
+const localSearchQuery = ref(contactStore.searchQuery);
+
 const send = () => {
   router.push("/add-contact");
 };
-// watch(contacts, (newValue) => {
-//   localStorage.setItem("contacts", JSON.stringify(newValue));
-// });
+watch(
+  [contacts, localSearchQuery],
+  ([newValue, newSearchQuery]) => {
+    localStorage.setItem("contacts", JSON.stringify(newValue));
+    contactStore.searchQuery = newSearchQuery;
+  },
+  { deep: true }
+);
 </script>
 <template>
   <section class="w-full lg:w-2/3 bg-white rounded-lg shadow p-6">
     <!-- Contact list header -->
-    <ContactListHeader :count="contactCount" />
+    <h2 class="text-xl mb-4 flex justify-between">
+      <span class="font-semibold">Contacts</span>
+      <span class="text-sm">{{ contactCount }} item(s)</span>
+    </h2>
+    <div class="flex items-center mb-4">
+      <input
+        type="text"
+        placeholder="Search contacts..."
+        class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        v-model="localSearchQuery"
+      />
+    </div>
     <ul id="contacts-list" class="divide-y divide-gray-200">
       <!-- Example Contact Item -->
       <ContactListItem
-        v-for="contact in contacts"
+        v-for="contact in filterContacts"
         :key="contact.id"
         :contact="contact"
         :onEdit="send"

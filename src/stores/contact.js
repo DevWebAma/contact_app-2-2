@@ -24,12 +24,18 @@ export const useContactStore = defineStore("contact", {
       };
     },
 
-    updateOne(id) {
-      this.contacts.splice(
-        this.contacts.findIndex((contact) => contact.id === id),
-        1,
-        { ...this.newContact }
+    updateOne(updatedContact) {
+      const index = this.contacts.findIndex(
+        (contact) => contact.id === updatedContact.id
       );
+      if (index !== -1) {
+        this.contacts.splice(index, 1, updatedContact);
+      }
+    },
+
+    resetNewContact() {
+      this.newContact = { id: null, name: "", email: "", phone: "" };
+      this.isEditing = false;
     },
 
     deleteOne(id) {
@@ -41,5 +47,9 @@ export const useContactStore = defineStore("contact", {
   },
   getters: {
     contactCount: (state) => state.contacts.length,
+    filterContacts: (state) =>
+      state.contacts.filter((contact) =>
+        contact.name.toLowerCase().startsWith(state.searchQuery.toLowerCase())
+      ),
   },
 });

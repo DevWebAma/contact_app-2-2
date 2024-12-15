@@ -2,6 +2,7 @@
 import { useContactStore } from "@/stores/contact";
 
 const contactStore = useContactStore();
+
 const props = defineProps({
   contact: {
     type: Object,
@@ -13,6 +14,7 @@ const props = defineProps({
   },
 });
 
+const contact = props.contact;
 const edit = () => {
   contactStore.editOne(props.contact.id);
   props.onEdit();
