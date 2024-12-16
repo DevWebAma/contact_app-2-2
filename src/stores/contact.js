@@ -25,12 +25,11 @@ export const useContactStore = defineStore("contact", {
     },
 
     updateOne(updatedContact) {
-      const index = this.contacts.findIndex(
-        (contact) => contact.id === updatedContact.id
+      this.contacts.splice(
+        this.contacts.findIndex((contact) => contact.id === updatedContact.id),
+        1,
+        updatedContact
       );
-      if (index !== -1) {
-        this.contacts.splice(index, 1, updatedContact);
-      }
     },
 
     resetNewContact() {

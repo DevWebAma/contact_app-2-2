@@ -1,6 +1,6 @@
 <script setup>
-import { reactive, watch } from "vue";
 import { useContactStore } from "@/stores/contact";
+import { reactive } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -33,14 +33,6 @@ const saveContactOrEdit = (id) => {
     add();
   }
 };
-
-watch(
-  () => contactStore.newContact,
-  (newValue) => {
-    Object.assign(newContactLocal, newValue);
-  },
-  { immediate: true }
-);
 </script>
 
 <template>
@@ -67,6 +59,7 @@ watch(
           placeholder="John Doe"
           class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           v-model="newContactLocal.name"
+          required
         />
       </div>
       <div>
@@ -91,6 +84,9 @@ watch(
           placeholder="+123 456 789"
           class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           v-model="newContactLocal.phone"
+          required
+          pattern="[0-9][0-9]*"
+          title="Veuillez respecter le format requis +123 456 789"
         />
       </div>
       <!-- Un seul bouton de soumission -->
