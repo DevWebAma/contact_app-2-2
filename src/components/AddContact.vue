@@ -84,8 +84,7 @@ const saveContactOrEdit = (id) => {
           placeholder="+123 456 789"
           class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           v-model="newContactLocal.phone"
-          required
-          pattern="[0-9][0-9]*"
+          pattern="^\+?[0-9\s-]{6,20}$"
           title="Veuillez respecter le format requis +123 456 789"
         />
       </div>
