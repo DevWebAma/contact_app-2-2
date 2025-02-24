@@ -1,6 +1,21 @@
 # contact_app
 
-This template should help get you started developing with Vue 3 in Vite.
+Une application web en **Vue.js 3** permettant d'ajouter, supprimer et rechercher des contacts de manière simple et intuitive.
+
+## 🚀 Fonctionnalités
+
+- 📝 **Ajout de contacts** (nom, email, téléphone)
+- ❌ **Suppression de contacts**
+- 🔍 **Recherche dynamique** par nom ou numéro
+- 📌 **Stockage temporaire** des contacts en local
+- 🎨 **Interface épurée et moderne** avec Tailwind CSS
+
+## 🛠️ Technologies utilisées
+
+- **Vue.js 3** (Composition API)
+- **Vite** (pour un build rapide)
+- **Tailwind CSS** (pour le style)
+- **Vercel** (pour le déploiement)
 
 ## Recommended IDE Setup
 
@@ -33,4 +48,5 @@ npm run build
 ```sh
 npm run test:unit
 ```
+
 # contact_app-2-2
